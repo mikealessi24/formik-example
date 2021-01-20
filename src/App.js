@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Field } from "formik";
+import { Formik, Field, Form } from "formik";
 import { TextField, Button } from "@material-ui/core";
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
         }}
       >
         {({ values, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <Form>
             {/* as is used to use a specific component Ex. material-ui TextField */}
             <Field
               placeholder="first name"
@@ -25,19 +25,21 @@ function App() {
               type="input"
               as={TextField}
             />
-            <Field
-              placeholder="last name"
-              name="lastName"
-              type="input"
-              as={TextField}
-            />
+            <div>
+              <Field
+                placeholder="last name"
+                name="lastName"
+                type="input"
+                as={TextField}
+              />
+            </div>
             <div>
               <Button disabled={isSubmitting} type="submit">
                 Submit
               </Button>
             </div>
             <pre>{JSON.stringify(values, null, 2)}</pre>
-          </form>
+          </Form>
         )}
       </Formik>
     </div>
