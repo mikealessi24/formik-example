@@ -26,6 +26,11 @@ const MyTextField = ({ placeholder, ...props }) => {
 
 const validationSchema = yup.object({
   firstName: yup.string().required().min(2).max(10),
+  pets: yup.array().of(
+    yup.object({
+      name: yup.string().required(),
+    })
+  ),
 });
 
 function App() {
