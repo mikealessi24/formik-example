@@ -1,11 +1,13 @@
 import React from "react";
-import { Formik, Field, Form, useField } from "formik";
+import { Formik, Field, Form, useField, FieldArray } from "formik";
 import {
   TextField,
   Button,
   Checkbox,
   Radio,
   FormControlLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 
 import * as yup from "yup";
@@ -36,6 +38,7 @@ function App() {
           isTall: false,
           cookies: [],
           yogurt: "",
+          pets: [{ type: "dog", name: "luna", id: "" + Math.random() }],
         }}
         // validate={(values) => {
         //   const errors = {};
@@ -109,11 +112,52 @@ function App() {
               label="blackberry"
             />
 
+            <FieldArray name="pets">
+              {(arrayHelpers) => (
+                <div>
+                  <Button
+                    onClick={() =>
+                      arrayHelpers.push({
+                        type: "fish",
+                        name: "",
+                        id: "" + Math.random(),
+                      })
+                    }
+                  >
+                    Add pet
+                  </Button>
+                  {values.pets.map((pets, index) => {
+                    return (
+                      <div key={pets.id}>
+                        <MyTextField
+                          name={`pets.${index}.name`}
+                          placeholder="pet name"
+                        />
+                        <Field
+                          name={`pets.${index}.type`}
+                          type="select"
+                          as={Select}
+                        >
+                          <MenuItem value="cat">Cat</MenuItem>
+                          <MenuItem value="dog">Dog</MenuItem>
+                          <MenuItem value="fish">Fish</MenuItem>
+                        </Field>
+                        <Button onClick={() => arrayHelpers.remove(index)}>
+                          x
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </FieldArray>
+
             <div>
               <Button disabled={isSubmitting} type="submit">
                 Submit
               </Button>
             </div>
+
             <pre>{JSON.stringify(values, null, 2)}</pre>
             <pre>{JSON.stringify(errors, null, 2)}</pre>
           </Form>
