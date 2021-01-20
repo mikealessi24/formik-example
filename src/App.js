@@ -1,12 +1,18 @@
 import React from "react";
 import { Formik, Field, Form } from "formik";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Checkbox, Radio } from "@material-ui/core";
 
 function App() {
   return (
     <div>
       <Formik
-        initialValues={{ firstName: "", lastName: "" }}
+        initialValues={{
+          firstName: "",
+          lastName: "",
+          isTall: false,
+          cookies: [],
+          yogurt: "",
+        }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           //make async call
@@ -33,6 +39,31 @@ function App() {
                 as={TextField}
               />
             </div>
+            <Field name="isTall" type="checkbox" as={Checkbox} />
+            <div>cookies:</div>
+            {/* this works as a group as long as the Fields all have the same name */}
+            <Field
+              name="cookies"
+              type="checkbox"
+              value="chocolate chip"
+              as={Checkbox}
+            />
+            <Field
+              name="cookies"
+              type="checkbox"
+              value="oatmeal raisin"
+              as={Checkbox}
+            />
+            <Field
+              name="cookies"
+              type="checkbox"
+              value="peanutbutter"
+              as={Checkbox}
+            />
+            <div>yogurt</div>
+            <Field name="yogurt" type="radio" value="peach" as={Radio} />
+            <Field name="yogurt" type="radio" value="blueberry" as={Radio} />
+            <Field name="yogurt" type="radio" value="blackberry" as={Radio} />
             <div>
               <Button disabled={isSubmitting} type="submit">
                 Submit
