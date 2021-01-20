@@ -8,6 +8,8 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 
+import * as yup from "yup";
+
 function MyRadio({ label, ...props }) {
   // use this useField hook to get access to the built in Field props
   const [field] = useField(props);
@@ -19,6 +21,11 @@ const MyTextField = ({ placeholder, ...props }) => {
   const errorText = meta.error && meta.touched ? meta.error : "";
   return <TextField {...field} helperText={errorText} error={!!errorText} />;
 };
+
+const validationSchema = yup.object({
+  firstName: yup.string().required().min(2).max(10),
+});
+
 function App() {
   return (
     <div>
@@ -30,14 +37,17 @@ function App() {
           cookies: [],
           yogurt: "",
         }}
-        validate={(values) => {
-          const errors = {};
+        // validate={(values) => {
+        //   const errors = {};
 
-          if (values.firstName.includes("bob")) {
-            errors.firstName = "error, no bob";
-          }
-          return errors;
-        }}
+        //   if (values.firstName.includes("mike")) {
+        //     errors.firstName = "error, no mike";
+        //   }
+        //   return errors;
+        // }}
+
+        // formik takes a validation schema prop, this one is using yup
+        validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           //make async call
