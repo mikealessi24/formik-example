@@ -9,11 +9,16 @@ import {
 } from "@material-ui/core";
 
 function MyRadio({ label, ...props }) {
+  // use this useField hook to get access to the built in Field props
   const [field] = useField(props);
-
   return <FormControlLabel {...field} control={<Radio />} label={label} />;
 }
 
+const MyTextField = ({ placeholder, ...props }) => {
+  const [field, meta] = useField(props);
+  const errorText = meta.error && meta.touched ? meta.error : "";
+  return <TextField {...field} helperText={errorText} error={!!errorText} />;
+};
 function App() {
   return (
     <div>
@@ -25,6 +30,14 @@ function App() {
           cookies: [],
           yogurt: "",
         }}
+        validate={(values) => {
+          const errors = {};
+
+          if (values.firstName.includes("bob")) {
+            errors.firstName = "error, no bob";
+          }
+          return errors;
+        }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           //make async call
@@ -34,14 +47,13 @@ function App() {
           resetForm();
         }}
       >
-        {({ values, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
+        {({ values, errors, isSubmitting }) => (
           <Form>
             {/* as is used to use a specific component Ex. material-ui TextField */}
-            <Field
+            <MyTextField
               placeholder="first name"
               name="firstName"
               type="input"
-              as={TextField}
             />
             <div>
               <Field
@@ -93,6 +105,7 @@ function App() {
               </Button>
             </div>
             <pre>{JSON.stringify(values, null, 2)}</pre>
+            <pre>{JSON.stringify(errors, null, 2)}</pre>
           </Form>
         )}
       </Formik>
